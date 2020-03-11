@@ -33,7 +33,11 @@ def plot_confirmed_cases(country_info,country_list):
 # plot the number of confirmed cases shifted by days since THRESH cases
 # (OPTIONAL: date_offset lets you start plotting a few days before this convergence)
 def plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh,date_offset=0,per_capita=None):
-	start_date = [np.where(ci > case_thresh)[0][0] + date_offset for ci in country_info.T]
+	if per_capita is None:
+		start_date = [np.where(ci > case_thresh)[0][0] + date_offset for ci in country_info.T]
+	else:
+		start_date = [np.where(ci/per_capita[ind] > case_thresh)[0][0] + date_offset for ind,ci in enumerate(country_info.T)]
+
 	end_date = country_info.shape[0]
 
 	shape_length = end_date - np.min(start_date) - date_offset
@@ -52,11 +56,12 @@ def plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh,date_of
 	plt.semilogy(range(date_offset,end_date - np.min(start_date)),shaped_data.T, marker='o')
 	# sns.lineplot(shaped_data.T)
 	plt.legend(country_list)
-	plt.xlabel('days since ' + str(case_thresh) + ' cases reported')
 	if per_capita is None:
 		plt.ylabel('number of confirmed COVID-19 cases')
+		plt.xlabel('days since ' + str(case_thresh) + ' cases reported')
 	else:
 		plt.ylabel('number of confirmed COVID-19 cases per capita (millions)')
+		plt.xlabel('days since ' + str(case_thresh) + 'cases per capita (millions) reported')
 	plt.title('growth in COVID-19 cases as of 11-03-20')
 	plt.show()
 
@@ -69,5 +74,6 @@ if __name__=='__main__':
 
 	# plot_confirmed_cases(country_info,country_list)
 	# plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3)
-	plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3,per_capita=country_pop)
+	# plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3)
+	plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=1,date_offset=-3,per_capita=country_pop)
 
