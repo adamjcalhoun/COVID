@@ -10,4 +10,4 @@ COVID-19 generally follows a similar growth pattern. The below is updated on Mar
 
 If you look at cases per capita, the USA is growing just as quickly but is not nearly as saturated (so far).
 
-![Number of cases, in days since >200 cases](031120_cases_percapita.png)
+![Number of cases, in days since >200 cases](031120_cases_capita.png)
