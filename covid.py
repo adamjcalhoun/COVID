@@ -61,19 +61,37 @@ def plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh,date_of
 		plt.xlabel('days since ' + str(case_thresh) + ' cases reported')
 	else:
 		plt.ylabel('number of confirmed COVID-19 cases per capita (millions)')
-		plt.xlabel('days since ' + str(case_thresh) + 'cases per capita (millions) reported')
-	plt.title('growth in COVID-19 cases as of 11-03-20')
+		plt.xlabel('days since ' + str(case_thresh) + ' cases per capita (millions) reported')
+		# plt.ylabel('number of confirmed COVID-19 cases per hospital bed')
+		# plt.xlabel('days since ' + str(case_thresh) + ' cases per hospital bed')
+	plt.title('growth in COVID-19 cases as of 13-03-20')
 	plt.show()
 
 if __name__=='__main__':
-	country_list = ['Italy','Iran (Islamic Republic of)','US','Germany','France','Spain','Republic of Korea']
-	country_pop = [60.48,81.16,327.2,82.79,66.99,46.66,51.47]
+	# https://github.com/CSSEGISandData/COVID-19	
+	
+	# hospital bed information from here: https://data.oecd.org/healtheqt/hospital-beds.htm
+	# data is in hospital beds / 1000 -> should multiply by 1000 below, not 100
+	
+	# country_list = ['Italy','Iran (Islamic Republic of)','US','Germany','France','Spain','Republic of Korea','Mainland China','Japan']
+	# country_pop = [60.48,81.16,327.2,82.79,66.99,46.66,51.47,1386,126.8]
 	df = load_data()
 
-	country_info = get_country_data(df,country_list)
+	
 
 	# plot_confirmed_cases(country_info,country_list)
-	# plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3)
-	# plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3)
+	# country_list = ['Italy','Iran','US','Germany','France','Spain','Korea, South']
+	# country_pop = [60.48,81.16,327.2,82.79,66.99,46.66,51.47]
+	country_list = ['Italy','United Kingdom','US','Germany','France','Spain','Korea, South']
+	country_pop = [60.48,66.44,327.2,82.79,66.99,46.66,51.47]
+
+	country_info = get_country_data(df,country_list)
+	plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=-3)
+	# plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=200,date_offset=0)
 	plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=1,date_offset=-3,per_capita=country_pop)
 
+	country_list = ['Italy','United Kingdom','US','Germany','France','Spain','Korea, South']
+	country_beds = [3.2,2.5,2.8,8.0,6.0,3.0,12.3]
+	country_pop = [60.48,66.44,327.2,82.79,66.99,46.66,51.47]
+	country_info = get_country_data(df,country_list)
+	plot_confirmed_cases_by_thresh(country_info,country_list,case_thresh=0.0005,date_offset=-3,per_capita=[a*1000*b for a,b in zip(country_beds,country_pop)])
